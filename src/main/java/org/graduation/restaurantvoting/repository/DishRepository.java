@@ -22,6 +22,6 @@ public interface DishRepository extends BaseRepository<Dish> {
 
     @Query("SELECT d FROM Dish d " +
             "WHERE d.id= :id and d.restaurant.id=:restaurantId")
-    List<Dish> get( @Param("id") int id,
-                    @Param("restaurantId") int restaurantId);
+    Dish get( @Param("id") int id,
+              @Param("restaurantId") int restaurantId);
 }

@@ -15,8 +15,8 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
     List<Restaurant> getAllByName(@Param("name") String name);
 
     @Query("SELECT r FROM Restaurant r " +
-            "WHERE " +
-            "r.id in (select d.restaurant.id from Dish d where " +
+            "WHERE r.name like '%name%' AND " +
+            "r.id IN (select d.restaurant.id from Dish d where " +
             "d.dateMenu =:dateMenu ) ORDER BY r.name" )
-    List<Restaurant> getActiveForDate(@Param("dateMenu") LocalDate dateMenu);
+    List<Restaurant> getActiveForDate(@Param("name") String name, @Param("dateMenu") LocalDate dateMenu);
 }
