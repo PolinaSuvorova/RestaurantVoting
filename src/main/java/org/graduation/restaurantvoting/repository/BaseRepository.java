@@ -1,5 +1,6 @@
 package org.graduation.restaurantvoting.repository;
 
+import org.apache.el.stream.Optional;
 import org.graduation.restaurantvoting.error.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

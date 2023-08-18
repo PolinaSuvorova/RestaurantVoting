@@ -30,12 +30,6 @@ public class AdminRestaurantController {
     @Autowired
     private RestaurantRepository repository;
 
-    @GetMapping("/{id}")
-    public Restaurant get(@PathVariable int id) {
-        log.info("get {}", id);
-        return repository.getExisted(id);
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -43,10 +37,27 @@ public class AdminRestaurantController {
         repository.deleteExisted(id);
     }
 
+    @GetMapping("/{id}")
+    public Restaurant get(@PathVariable int id) {
+        log.info("get {}", id);
+        return repository.getExisted(id);
+    }
     @GetMapping
     public List<Restaurant> getAll() {
         log.info("getAll");
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
+    }
+
+    @GetMapping("/filter")
+    public List<Restaurant> getByFilter(
+            @RequestParam @Nullable String name,
+            @RequestParam @Nullable LocalDate menuDate) {
+        log.info("getByFilter");
+        if (menuDate == null) {
+            return repository.getAllByName(name);
+        } else {
+            return repository.getActiveForDate(menuDate);
+        }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -66,17 +77,5 @@ public class AdminRestaurantController {
         log.info("update {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);
         repository.save(restaurant);
-    }
-
-    @GetMapping("/filter")
-    public List<Restaurant> getByFilter(
-            @RequestParam @Nullable String name,
-            @RequestParam @Nullable LocalDate menuDate) {
-        log.info("getByFilter");
-        if (menuDate == null) {
-            return repository.getAllByName(name);
-        } else {
-            return repository.getActiveForDate(name, menuDate);
-        }
     }
 }

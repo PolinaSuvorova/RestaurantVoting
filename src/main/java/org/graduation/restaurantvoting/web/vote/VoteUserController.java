@@ -43,8 +43,6 @@ public class VoteUserController {
     @Autowired
     private DataJpaVoteRepository repository;
 
-    @Autowired
-    private RestaurantRepository restaurantRepository;
     private final Logger log = getLogger(getClass());
     public static final String REST_URL = "/api/votes";
 

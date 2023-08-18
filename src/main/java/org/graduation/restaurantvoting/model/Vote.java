@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.graduation.restaurantvoting.util.DateTimeUtil;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -13,7 +15,7 @@ import java.time.LocalTime;
 @Table(name = "vote", uniqueConstraints =
         {
                 @UniqueConstraint(columnNames = {"user_id", "date_vote"}, name = "vote_unique_user_date_idx"),
-                @UniqueConstraint(columnNames = {"restaurant_id", "date_vote"}, name = "vote_unique_restaurant_date_idx")
+                @UniqueConstraint(columnNames = {"restaurant_id", "date_vote","user_id"}, name = "vote_unique_restaurant_date_idx")
         })
 @Getter
 @Setter
@@ -35,13 +37,13 @@ public class Vote extends AbstractBaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @ToString.Exclude
-    @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
-    @NotNull
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public Vote(int id, User user, Restaurant restaurant, LocalDate voteDate, LocalTime now) {

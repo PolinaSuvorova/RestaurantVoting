@@ -26,14 +26,14 @@ public class RestaurantController {
     public List<Restaurant> getActiveForCurrentDate( ) {
         log.info("getActiveForDate");
         LocalDate menuDate = LocalDate.now();
-        return repository.getActiveForDate("", menuDate);
+        return repository.getActiveForDate(menuDate);
     }
 
     @GetMapping("/filter")
     public List<Restaurant> getActiveForWithFilter(@RequestParam @Nullable String name) {
         log.info("getActiveForDate");
         LocalDate menuDate = LocalDate.now();
-        return repository.getActiveForDate(name, menuDate);
+        return repository.getActiveForDate(menuDate);
     }
 
     @GetMapping("/{id}")
