@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -42,7 +41,7 @@ public class RestaurantController {
     public Restaurant get(@PathVariable int id) {
         log.info("get {}", id);
         List<Restaurant> restaurantsBd = repository.get(id, LocalDate.now());
-        if ( restaurantsBd.size() != 0){
+        if (restaurantsBd.size() != 0) {
             return restaurantsBd.get(0);
         }
         throw new NotFoundException("Restaurant with id=" + id + " not found");

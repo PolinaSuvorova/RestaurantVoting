@@ -2,7 +2,6 @@ package org.graduation.restaurantvoting.repository;
 
 import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.User;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 

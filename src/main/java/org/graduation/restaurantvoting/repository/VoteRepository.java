@@ -3,7 +3,6 @@ package org.graduation.restaurantvoting.repository;
 import org.graduation.restaurantvoting.model.Vote;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -20,7 +19,7 @@ public interface VoteRepository extends BaseRepository<Vote> {
     List<Vote> getAll(int userId);
 
     @Query("SELECT v from Vote v WHERE v.user.id=:userId AND v.dateVote >= :startDate AND v.dateVote <= :endDate ORDER BY v.dateVote DESC")
-    List<Vote> getBetween( LocalDate startDate, LocalDate endDate, int userId);
+    List<Vote> getBetween(LocalDate startDate, LocalDate endDate, int userId);
 
     @Query("SELECT m FROM Vote m JOIN FETCH m.user WHERE m.id = ?1 and m.user.id = ?2")
     Vote getWithUser(int id, int userId);

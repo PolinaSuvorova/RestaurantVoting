@@ -19,14 +19,15 @@ public class VoteTo extends BaseTo {
 
     @NotNull
     LocalDate voteDate;
+
     @ConstructorProperties({"id", "restaurantId", "voteDate"})
-    public VoteTo(Integer id, Integer restaurantId,LocalDate voteDate) {
+    public VoteTo(Integer id, Integer restaurantId, LocalDate voteDate) {
         super(id);
         this.restaurantId = restaurantId;
         this.voteDate = voteDate;
     }
 
-    public boolean isNew( ){
+    public boolean isNew() {
         return this.id == null ? true : false;
     }
 

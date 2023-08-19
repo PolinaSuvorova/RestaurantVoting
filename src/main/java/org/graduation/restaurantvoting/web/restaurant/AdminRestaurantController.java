@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.graduation.restaurantvoting.error.IllegalRequestDataException;
 import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
-import org.graduation.restaurantvoting.web.dish.DishValidator;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

@@ -30,10 +30,10 @@ public class DataJpaVoteRepository {
             return null;
         }
         Vote vote = new Vote(voteTo.id(),
-                             userRepository.getReferenceById(userId),
-                             restaurantRepository.getReferenceById(userId),
-                             voteTo.getVoteDate(),
-                             LocalTime.now());
+                userRepository.getReferenceById(userId),
+                restaurantRepository.getReferenceById(userId),
+                voteTo.getVoteDate(),
+                LocalTime.now());
         return voteRepository.save(vote);
     }
 

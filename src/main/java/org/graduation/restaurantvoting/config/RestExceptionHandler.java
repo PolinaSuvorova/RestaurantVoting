@@ -11,7 +11,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.AuthenticationException;
@@ -24,7 +23,6 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -67,6 +65,7 @@ public class RestExceptionHandler {
             put(AuthenticationException.class, UNAUTHORIZED);
         }
     };
+
     @ExceptionHandler(BindException.class)
     public ProblemDetail bindException(BindException ex, HttpServletRequest request) {
         return processException(ex, request, Map.of("invalid_params", getErrorMap(ex.getBindingResult())));

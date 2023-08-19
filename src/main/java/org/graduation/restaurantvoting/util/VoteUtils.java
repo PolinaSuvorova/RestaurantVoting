@@ -14,7 +14,7 @@ public class VoteUtils {
     }
 
     public static List<VoteTo> getTos(Collection<Vote> votes) {
-        if (votes == null){
+        if (votes == null) {
             return new ArrayList<>();
         }
         return votes.stream()

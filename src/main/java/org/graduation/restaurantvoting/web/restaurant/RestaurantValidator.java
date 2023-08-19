@@ -2,9 +2,7 @@ package org.graduation.restaurantvoting.web.restaurant;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.graduation.restaurantvoting.model.Dish;
 import org.graduation.restaurantvoting.model.Restaurant;
-import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -12,7 +10,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.HandlerMapping;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 @Component
@@ -42,11 +39,11 @@ public class RestaurantValidator implements org.springframework.validation.Valid
 
         Restaurant restaurant = (Restaurant) target;
         String name = restaurant.getName();
-        if ( name == null || name.isEmpty() ){
+        if (name == null || name.isEmpty()) {
             return;
         }
 
-        if (repository.getAllByName( name )
+        if (repository.getAllByName(name)
                 .stream()
                 .anyMatch(d -> {
                     assert d.getId() != null;

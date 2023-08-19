@@ -1,15 +1,12 @@
 package org.graduation.restaurantvoting.web.vote;
 
 import jakarta.validation.Valid;
-import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.model.Vote;
 import org.graduation.restaurantvoting.repository.DataJpaVoteRepository;
-import org.graduation.restaurantvoting.repository.RestaurantRepository;
 import org.graduation.restaurantvoting.to.VoteTo;
 import org.graduation.restaurantvoting.util.VoteUtils;
 import org.graduation.restaurantvoting.util.validation.ValidationUtil;
 import org.graduation.restaurantvoting.web.AuthUser;
-import org.graduation.restaurantvoting.web.user.UniqueMailValidator;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +57,7 @@ public class VoteUserController {
         int userId = AuthUser.get().id();
         log.info("get meal {} for user {}", id, userId);
         ValidationUtil.assureIdConsistent(voteTo, id);
-        repository.delete(id,userId);
+        repository.delete(id, userId);
     }
 
     @GetMapping
@@ -72,10 +69,10 @@ public class VoteUserController {
 
     @GetMapping("/filter")
     public List<VoteTo> getByFilter(
-            @RequestParam @Nullable LocalDate voteDateStart,@RequestParam @Nullable LocalDate voteDateEnd ) {
+            @RequestParam @Nullable LocalDate voteDateStart, @RequestParam @Nullable LocalDate voteDateEnd) {
         int userId = AuthUser.get().id();
-        log.info("getall by Date {}-{} for user {}",voteDateStart,voteDateEnd, userId);
-        return VoteUtils.getTos(repository.getBetween(voteDateStart,voteDateEnd,userId));
+        log.info("getall by Date {}-{} for user {}", voteDateStart, voteDateEnd, userId);
+        return VoteUtils.getTos(repository.getBetween(voteDateStart, voteDateEnd, userId));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -83,7 +80,7 @@ public class VoteUserController {
         log.info("create {}", voteTo);
         checkNew(voteTo);
         int userId = AuthUser.get().id();
-        Vote created = repository.save(voteTo,userId,voteTo.getRestaurantId());
+        Vote created = repository.save(voteTo, userId, voteTo.getRestaurantId());
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -96,7 +93,7 @@ public class VoteUserController {
         log.info("update {} with id={}", voteTo, id);
         assureIdConsistent(voteTo, id);
         int userId = AuthUser.get().id();
-        repository.save(voteTo,userId,voteTo.getRestaurantId());
+        repository.save(voteTo, userId, voteTo.getRestaurantId());
     }
 
 }

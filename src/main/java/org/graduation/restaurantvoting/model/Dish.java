@@ -1,10 +1,12 @@
 package org.graduation.restaurantvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,7 +24,7 @@ import java.time.LocalDate;
 public class Dish extends AbstractNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RESTAURANT_ID", nullable = false,updatable = false)
+    @JoinColumn(name = "RESTAURANT_ID", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
     private Restaurant restaurant;
@@ -40,6 +42,7 @@ public class Dish extends AbstractNamedEntity {
         this.dateMenu = dateMenu;
         this.price = price;
     }
+
     public Dish(Integer id, String name, Double price, LocalDate dateMenu, Restaurant restaurant) {
         super(id, name);
         this.dateMenu = dateMenu;

@@ -3,11 +3,9 @@ package org.graduation.restaurantvoting.web.dish;
 import jakarta.validation.Valid;
 import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.Dish;
-import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
 import org.graduation.restaurantvoting.util.validation.ValidationUtil;
-import org.graduation.restaurantvoting.web.user.UniqueMailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,7 @@ public class AdminDishController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int restaurantId, @Valid @PathVariable int id) {
         log.info("delete dish {}", id);
-        repository.deleteExisted(id,restaurantId);
+        repository.deleteExisted(id, restaurantId);
     }
 
     @GetMapping("/{restaurantId}/dishes/{id}")
@@ -72,7 +70,7 @@ public class AdminDishController {
             @RequestParam @Nullable LocalDate startDate,
             @RequestParam @Nullable LocalDate endDate) {
         log.info("filter dishes");
-        return repository.getBetween(restaurantId,startDate,endDate);
+        return repository.getBetween(restaurantId, startDate, endDate);
     }
 
     @PutMapping(value = "/{restaurantId}/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,7 +78,7 @@ public class AdminDishController {
     public void update(@Valid @RequestBody Dish dish, @PathVariable int restaurantId, @PathVariable int id) {
         log.info("update dish {} with id={}", dish, id);
         ValidationUtil.assureIdConsistent(dish, id);
-        ValidationUtil.assureIdConsistent(repository.getWithRestaurant(id,restaurantId).getRestaurant(), restaurantId);
+        ValidationUtil.assureIdConsistent(repository.getWithRestaurant(id, restaurantId).getRestaurant(), restaurantId);
         save(dish);
     }
 
