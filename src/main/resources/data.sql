@@ -15,9 +15,9 @@ VALUES ('USER', 1),
        ('USER', 2);
 
 INSERT INTO RESTAURANT (name)
-VALUES ('Restarant1'),
-       ('Restarant2'),
-       ('Restarant3');
+VALUES ('Restaurant1'),
+       ('Restaurant2'),
+       ('Restaurant3');
 
 INSERT INTO DISH (name,PRICE,RESTAURANT_ID)
 VALUES ('Dish1.1',600.00,1),

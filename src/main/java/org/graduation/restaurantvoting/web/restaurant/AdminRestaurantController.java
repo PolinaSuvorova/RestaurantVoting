@@ -1,15 +1,21 @@
 package org.graduation.restaurantvoting.web.restaurant;
 
 import jakarta.validation.Valid;
+import org.graduation.restaurantvoting.error.IllegalRequestDataException;
 import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
+import org.graduation.restaurantvoting.web.dish.DishValidator;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +34,18 @@ public class AdminRestaurantController {
     private final Logger log = getLogger(getClass());
 
     @Autowired
+    private RestaurantValidator restaurantValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(restaurantValidator);
+    }
+
+
+    @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     private RestaurantRepository repository;
 
     @DeleteMapping("/{id}")
@@ -42,10 +60,11 @@ public class AdminRestaurantController {
         log.info("get {}", id);
         return repository.getExisted(id);
     }
+
     @GetMapping
     public List<Restaurant> getAll() {
         log.info("getAll");
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     @GetMapping("/filter")
@@ -53,8 +72,8 @@ public class AdminRestaurantController {
             @RequestParam @Nullable String name,
             @RequestParam @Nullable LocalDate menuDate) {
         log.info("getByFilter");
-        if (menuDate == null) {
-            return repository.getAllByName(name);
+        if (menuDate != null) {
+            return repository.getAllByName(name, menuDate);
         } else {
             return repository.getActiveForDate(menuDate);
         }
@@ -76,6 +95,10 @@ public class AdminRestaurantController {
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {} with id={}", restaurant, id);
         assureIdConsistent(restaurant, id);
-        repository.save(restaurant);
+        try {
+            repository.save(restaurant);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalRequestDataException(messageSource.getMessage("Restaurant with name already is exist", null, LocaleContextHolder.getLocale()));
+        }
     }
 }

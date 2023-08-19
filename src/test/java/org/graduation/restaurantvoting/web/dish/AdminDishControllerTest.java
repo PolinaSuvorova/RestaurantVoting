@@ -6,6 +6,7 @@ import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.util.JsonUtil;
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.graduation.restaurantvoting.web.DishTestData;
+import org.graduation.restaurantvoting.web.user.UniqueMailValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import static org.graduation.restaurantvoting.web.RestaurantTestData.RESTAURANT1
 import static org.graduation.restaurantvoting.web.RestaurantTestData.RESTAURANT3_ID;
 import static org.graduation.restaurantvoting.web.TestUtil.userHttpBasic;
 import static org.graduation.restaurantvoting.web.UserTestData.admin;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -54,6 +56,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(DISH_MATCHER.contentJson(dish1));
     }
+
 
     @Test
     void getUnauth() throws Exception {
@@ -115,5 +118,31 @@ class AdminDishControllerTest extends AbstractControllerTest {
         newDish.setId(newId);
         DISH_MATCHER.assertMatch(created, newDish);
         DISH_MATCHER.assertMatch(dishRepository.get(newId, RESTAURANT3_ID), newDish);
+    }
+
+    @Test
+    void createWithLocationDuplicateKey() throws Exception {
+        Dish newDish = DishTestData.getNew();
+        newDish.setName(dish1.getName());
+        perform(MockMvcRequestBuilders.post(REST_URL + RESTAURANT1_ID + "/dishes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(newDish)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString(DishValidator.EXCEPTION_DUPLICATE_DISH)));
+        }
+
+    @Test
+    void updateWithLocationDuplicateKey() throws Exception {
+        Dish updDish = DishTestData.getUpdated();
+        updDish.setName(dish2.getName());
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT1_ID + "/dishes/" + DISH1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(admin))
+                .content(JsonUtil.writeValue(updDish)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString(DishValidator.EXCEPTION_DUPLICATE_DISH)));
     }
 }

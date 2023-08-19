@@ -19,7 +19,6 @@ import java.time.LocalDate;
                 columnList = "RESTAURANT_ID , DATE_MENU, NAME", unique = true),
                 @Index(name = "DISH_DATE_INDEX", columnList = "DATE_MENU, NAME", unique = true)}
 )
-@ToString(exclude = {"restaurant"})
 public class Dish extends AbstractNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,21 +40,11 @@ public class Dish extends AbstractNamedEntity {
         this.dateMenu = dateMenu;
         this.price = price;
     }
-
     public Dish(Integer id, String name, Double price, LocalDate dateMenu, Restaurant restaurant) {
         super(id, name);
         this.dateMenu = dateMenu;
         this.price = price;
         this.restaurant = restaurant;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Dish{id=" + id +
-//                ", name='" + name + '\'' +
-//                ", dateMenu=" + dateMenu +
-//                ", price=" + price +
-//                 '}';
-//    }
 }
 

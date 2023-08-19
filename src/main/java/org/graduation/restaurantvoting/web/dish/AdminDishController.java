@@ -7,6 +7,7 @@ import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
 import org.graduation.restaurantvoting.util.validation.ValidationUtil;
+import org.graduation.restaurantvoting.web.user.UniqueMailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,6 +31,14 @@ public class AdminDishController {
     public static final String REST_URL = "/api/admin/restaurants";
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private DishValidator dishValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(dishValidator);
+    }
 
     @Autowired
     private DishRepository repository;
@@ -78,7 +88,8 @@ public class AdminDishController {
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
         log.info("create dish {} ", dish);
         ValidationUtil.checkNew(dish);
-        dish.setRestaurant(restaurantRepository.getExisted(restaurantId));
+        dish.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
+        ValidationUtil.assureIdConsistent(dish.getRestaurant(), restaurantId);
         Dish created = save(dish);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")

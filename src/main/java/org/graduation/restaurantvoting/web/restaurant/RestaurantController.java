@@ -1,5 +1,6 @@
 package org.graduation.restaurantvoting.web.restaurant;
 
+import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -23,7 +25,7 @@ public class RestaurantController {
     private RestaurantRepository repository;
 
     @GetMapping
-    public List<Restaurant> getActiveForCurrentDate( ) {
+    public List<Restaurant> getActiveForCurrentDate() {
         log.info("getActiveForDate");
         LocalDate menuDate = LocalDate.now();
         return repository.getActiveForDate(menuDate);
@@ -33,12 +35,16 @@ public class RestaurantController {
     public List<Restaurant> getActiveForWithFilter(@RequestParam @Nullable String name) {
         log.info("getActiveForDate");
         LocalDate menuDate = LocalDate.now();
-        return repository.getActiveForDate(menuDate);
+        return repository.getAllByName(name, menuDate);
     }
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get {}", id);
-        return repository.getExisted(id);
+        List<Restaurant> restaurantsBd = repository.get(id, LocalDate.now());
+        if ( restaurantsBd.size() != 0){
+            return restaurantsBd.get(0);
+        }
+        throw new NotFoundException("Restaurant with id=" + id + " not found");
     }
 }
