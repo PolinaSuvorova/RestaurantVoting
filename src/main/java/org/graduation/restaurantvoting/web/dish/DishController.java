@@ -2,6 +2,8 @@ package org.graduation.restaurantvoting.web.dish;
 
 import org.graduation.restaurantvoting.model.Dish;
 import org.graduation.restaurantvoting.repository.DishRepository;
+import org.graduation.restaurantvoting.util.ClockHolder;
+import org.graduation.restaurantvoting.util.validation.ValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +35,14 @@ public class DishController {
     public Dish get(@PathVariable int restaurantId, @PathVariable int id) {
         log.info("get Dish {} ", id);
         Dish dish = repository.get(id, restaurantId);
+        ValidationUtil.checkNotFoundWithId(dish, id);
         return dish;
     }
 
     @GetMapping("/{restaurantId}/dishes")
     public List<Dish> getActiveForCurrentDate(@PathVariable int restaurantId) {
         log.info("get all");
-        return repository.getBetween(restaurantId, LocalDate.now(), LocalDate.now());
+        return repository.getBetween(restaurantId, LocalDate.now(ClockHolder.getClock()), LocalDate.now(ClockHolder.getClock()));
     }
 
 }

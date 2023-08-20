@@ -10,7 +10,11 @@ import java.util.List;
 public class VoteUtils {
 
     public static VoteTo convertTo(Vote vote) {
-        return new VoteTo(vote.getId(), vote.getRestaurant().getId(), vote.getDateVote());
+        return new VoteTo(
+                vote.getId(),
+                vote.getUser().getId(),
+                vote.getRestaurant().getId(),
+                vote.getDateVote());
     }
 
     public static List<VoteTo> getTos(Collection<Vote> votes) {
@@ -21,4 +25,5 @@ public class VoteUtils {
                 .map(VoteUtils::convertTo)
                 .toList();
     }
+
 }

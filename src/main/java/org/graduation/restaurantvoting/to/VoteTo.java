@@ -14,21 +14,26 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 public class VoteTo extends BaseTo {
+
+    @NotNull
+    Integer userId;
+
     @NotNull
     Integer restaurantId;
 
     @NotNull
     LocalDate voteDate;
 
-    @ConstructorProperties({"id", "restaurantId", "voteDate"})
-    public VoteTo(Integer id, Integer restaurantId, LocalDate voteDate) {
+    @ConstructorProperties({"id", "userId", "restaurantId", "voteDate"})
+    public VoteTo(Integer id, Integer userId, Integer restaurantId, LocalDate voteDate) {
         super(id);
+        this.userId = userId;
         this.restaurantId = restaurantId;
         this.voteDate = voteDate;
     }
 
     public boolean isNew() {
-        return this.id == null ? true : false;
+        return this.id == null;
     }
 
     @Override

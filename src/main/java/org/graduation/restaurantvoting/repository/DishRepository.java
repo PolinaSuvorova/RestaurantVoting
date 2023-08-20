@@ -18,6 +18,12 @@ public interface DishRepository extends BaseRepository<Dish> {
                           LocalDate startDate,
                           LocalDate endDate);
 
+    @Query("SELECT count(d.id) FROM Dish d " +
+            "WHERE d.restaurant.id=:restaurantId AND " +
+            "d.dateMenu = :startDate ")
+    int isExistDate(int restaurantId,
+                    LocalDate startDate);
+
     @Query("SELECT d FROM Dish d " +
             "WHERE d.restaurant.id=:restaurantId ORDER BY d.dateMenu DESC")
     List<Dish> getAllByRestId(int restaurantId);

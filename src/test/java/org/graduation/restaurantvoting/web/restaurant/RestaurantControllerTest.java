@@ -7,12 +7,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
+import static org.graduation.restaurantvoting.web.RestaurantTestData.*;
 import static org.graduation.restaurantvoting.web.TestUtil.userHttpBasic;
+import static org.graduation.restaurantvoting.web.UserTestData.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.graduation.restaurantvoting.web.RestaurantTestData.*;
-import static org.graduation.restaurantvoting.web.UserTestData.user;
+
 class RestaurantControllerTest extends AbstractControllerTest {
     private static final String REST_URL = RestaurantController.REST_URL;
 
@@ -28,7 +29,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getActiveForWithFilter() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL+ "/filter")
+        perform(MockMvcRequestBuilders.get(REST_URL + "/filter")
                 .param("name", "Restaurant1")
                 .with(userHttpBasic(user)))
                 .andExpect(status().isOk())

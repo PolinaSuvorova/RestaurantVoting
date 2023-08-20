@@ -3,14 +3,18 @@ package org.graduation.restaurantvoting.util.validation;
 import lombok.experimental.UtilityClass;
 import org.graduation.restaurantvoting.HasId;
 import org.graduation.restaurantvoting.error.IllegalRequestDataException;
+import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.Restaurant;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @UtilityClass
 public class ValidationUtil {
+    public static final LocalTime END_TIME_FOR_CHANGES = LocalTime.of(11, 0);
 
     public static void checkNew(HasId bean) {
         if (!bean.isNew()) {
@@ -40,6 +44,42 @@ public class ValidationUtil {
         } else if (been.getId() != restaurantId) {
             throw new IllegalRequestDataException(been.getClass().getSimpleName() + " id of restaurant must has id=" + restaurantId);
 
+        }
+    }
+
+    public static void checkDate(LocalDate localDate) {
+        if (localDate == null) {
+            throw new IllegalRequestDataException("Date must not be null");
+        } else if (localDate.isBefore(LocalDate.now())) {
+            throw new IllegalRequestDataException("Changes permitted only for current Date");
+        }
+    }
+
+    public static void checkTime(LocalTime localTime) {
+        if (localTime == null) {
+            throw new IllegalRequestDataException("Time must not be null");
+        } else if (!localTime.isBefore(END_TIME_FOR_CHANGES)) {
+            throw new IllegalRequestDataException("Changes permitted only for current Date" + " from 00:00 to " + END_TIME_FOR_CHANGES);
+        }
+    }
+
+    public static <T> T checkNotFoundWithId(T object, int id) {
+        checkNotFoundWithId(object != null, id);
+        return object;
+    }
+
+    public static void checkNotFoundWithId(boolean found, int id) {
+        checkNotFound(found, "id=" + id);
+    }
+
+    public static <T> T checkNotFound(T object, String msg) {
+        checkNotFound(object != null, msg);
+        return object;
+    }
+
+    public static void checkNotFound(boolean found, String msg) {
+        if (!found) {
+            throw new NotFoundException("Not found entity with " + msg);
         }
     }
 }
