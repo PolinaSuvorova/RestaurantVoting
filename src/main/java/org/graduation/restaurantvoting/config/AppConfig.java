@@ -29,7 +29,7 @@ public class AppConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
     Server h2Server() throws SQLException {
         log.info("Start H2 TCP server");
-        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
+        return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9093");
     }
 
     //   https://stackoverflow.com/a/74630129/548473
