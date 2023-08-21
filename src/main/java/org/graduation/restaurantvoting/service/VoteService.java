@@ -80,7 +80,7 @@ public class VoteService {
 
         checkNotFoundWithId(vote.getRestaurant(), restaurantId);
         if (dishRepository.isExistDate(restaurantId, vote.getDateVote()) == 0) {
-            throw new NotFoundException("Not found restaurant with menu");
+            throw new IllegalArgumentException("Not found restaurant with menu");
         }
     }
 }

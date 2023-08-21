@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.graduation.restaurantvoting.model.Dish;
 import org.graduation.restaurantvoting.repository.DishRepository;
+import org.graduation.restaurantvoting.util.ClockHolder;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -35,10 +36,10 @@ public class DishValidator implements org.springframework.validation.Validator {
 
         LocalDate dateMenu = dish.getDateMenu();
         if (dateMenu == null && methodCall.equals("POST")) {
-            dateMenu = LocalDate.now();
+            dateMenu = LocalDate.now(ClockHolder.getClock());
         }
 
-        if (dateMenu == null || !dateMenu.equals(LocalDate.now())) {
+        if (dateMenu == null || !dateMenu.equals(LocalDate.now(ClockHolder.getClock()))) {
             errors.rejectValue("dateMenu", "", EXCEPTION_DATE_DISH);
         }
 
