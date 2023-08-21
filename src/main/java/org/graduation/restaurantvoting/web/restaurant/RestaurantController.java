@@ -3,6 +3,7 @@ package org.graduation.restaurantvoting.web.restaurant;
 import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.Restaurant;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
+import org.graduation.restaurantvoting.util.ClockHolder;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -40,7 +41,7 @@ public class RestaurantController {
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
         log.info("get {}", id);
-        List<Restaurant> restaurantsBd = repository.get(id, LocalDate.now());
+        List<Restaurant> restaurantsBd = repository.get(id, LocalDate.now(ClockHolder.getClock()));
         if (restaurantsBd.size() != 0) {
             return restaurantsBd.get(0);
         }

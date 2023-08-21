@@ -16,7 +16,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
 
     @Query("SELECT r FROM Restaurant r " +
             "WHERE r.id =:id and r.id in (select d.restaurant.id from Dish d where " +
-            "d.dateMenu =:dateMenu )")
+             "d.dateMenu =:dateMenu )")
     List<Restaurant> get(int id, LocalDate dateMenu);
 
     @Query("SELECT r FROM Restaurant r " +
