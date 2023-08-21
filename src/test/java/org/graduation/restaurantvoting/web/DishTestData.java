@@ -1,6 +1,7 @@
 package org.graduation.restaurantvoting.web;
 
 import org.graduation.restaurantvoting.model.Dish;
+import static org.graduation.restaurantvoting.web.RestaurantTestData.*;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -22,7 +23,7 @@ public class DishTestData {
     public static final Dish dishHistory = new Dish(DISH_HISTORY_ID, "Dish1.1", 600.00, LocalDate.of(2023, Month.AUGUST, 8));
     public static final List<Dish> dishesNowRest1 = List.of(dish1, dish2);
 
-    public static final List<Dish> dishesRest1 = List.of(dish1, dish2, dishHistory);
+    public static final List<Dish> dishesRest1 = List.of(dish1, dish2,dishHistory);
     public static final List<Dish> dishesHistoryRest1 = List.of(dishHistory);
 
     public static Dish getNew() {

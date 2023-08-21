@@ -1,9 +1,8 @@
 package org.graduation.restaurantvoting.web;
-
-import org.graduation.restaurantvoting.util.JsonUtil;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.graduation.restaurantvoting.util.JsonUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
