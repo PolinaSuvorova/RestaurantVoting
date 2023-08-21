@@ -18,7 +18,6 @@ import java.util.List;
 import static org.graduation.restaurantvoting.web.RestaurantTestData.*;
 import static org.graduation.restaurantvoting.web.TestUtil.userHttpBasic;
 import static org.graduation.restaurantvoting.web.UserTestData.admin;
-import static org.graduation.restaurantvoting.web.UserTestData.user;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -129,7 +128,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getByFilter() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL+ "/filter")
+        perform(MockMvcRequestBuilders.get(REST_URL + "/filter")
                 .param("name", "Restaurant1")
                 .param("menuDate", String.valueOf(LocalDate.now()))
                 .with(userHttpBasic(admin)))

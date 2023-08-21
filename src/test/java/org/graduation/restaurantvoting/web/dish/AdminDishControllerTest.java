@@ -6,7 +6,6 @@ import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.util.JsonUtil;
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.graduation.restaurantvoting.web.DishTestData;
-import org.graduation.restaurantvoting.web.user.UniqueMailValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -131,7 +130,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string(containsString(DishValidator.EXCEPTION_DUPLICATE_DISH)));
-        }
+    }
 
     @Test
     void updateWithLocationDuplicateKey() throws Exception {

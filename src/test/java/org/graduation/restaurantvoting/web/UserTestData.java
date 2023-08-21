@@ -3,7 +3,6 @@ package org.graduation.restaurantvoting.web;
 import org.graduation.restaurantvoting.model.Role;
 import org.graduation.restaurantvoting.model.User;
 import org.graduation.restaurantvoting.util.JsonUtil;
-import org.graduation.restaurantvoting.web.MatcherFactory;
 
 import java.util.Collections;
 import java.util.Date;
