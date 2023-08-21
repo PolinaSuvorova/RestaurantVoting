@@ -1,5 +1,7 @@
 package org.graduation.restaurantvoting.web.dish;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.graduation.restaurantvoting.model.Dish;
 import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.util.ClockHolder;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = DishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api("Api for user by watch")
 public class DishController {
 
     public static final String REST_URL = "/api/restaurants/";
@@ -32,14 +35,17 @@ public class DishController {
     }
 
     @GetMapping("/{restaurantId}/dishes/{id}")
+    @ApiOperation("Get dish for restaurant on current day")
     public Dish get(@PathVariable int restaurantId, @PathVariable int id) {
         log.info("get Dish {} ", id);
         Dish dish = repository.get(id, restaurantId);
         ValidationUtil.checkNotFoundWithId(dish, id);
+        ValidationUtil.checkDate(dish.getDateMenu());
         return dish;
     }
 
     @GetMapping("/{restaurantId}/dishes")
+    @ApiOperation("Get dishes for restaurant on current day")
     public List<Dish> getActiveForCurrentDate(@PathVariable int restaurantId) {
         log.info("get all");
         return repository.getBetween(restaurantId, LocalDate.now(ClockHolder.getClock()), LocalDate.now(ClockHolder.getClock()));

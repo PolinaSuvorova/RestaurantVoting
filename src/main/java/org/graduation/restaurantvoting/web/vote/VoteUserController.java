@@ -1,5 +1,7 @@
 package org.graduation.restaurantvoting.web.vote;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import org.graduation.restaurantvoting.model.Vote;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
@@ -27,6 +29,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
 @RequestMapping(value = VoteUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api("Api for restaurant voting ")
 public class VoteUserController {
 
     @Autowired
@@ -42,6 +45,7 @@ public class VoteUserController {
     public static final String REST_URL = "/api/votes";
 
     @GetMapping("/{id}")
+    @ApiOperation("Get vote by id for user")
     public VoteTo get(@PathVariable int id) {
         int userId = AuthUser.get().id();
         log.info("get meal {} for user {}", id, userId);
@@ -49,6 +53,7 @@ public class VoteUserController {
     }
 
     @GetMapping
+    @ApiOperation("Get all votes for user")
     public List<VoteTo> getAll() {
         int userId = AuthUser.get().id();
         log.info("getall {} for user", userId);
@@ -57,6 +62,7 @@ public class VoteUserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Delete vote")
     public void delete(@PathVariable int id) {
         int userId = AuthUser.get().id();
         log.info("delete vote {} for user {}", id, userId);
@@ -65,6 +71,7 @@ public class VoteUserController {
 
 
     @GetMapping("/filter")
+    @ApiOperation("Get Votes by filter")
     public List<VoteTo> getByFilter(
             @RequestParam @Nullable LocalDate voteDateStart, @RequestParam @Nullable LocalDate voteDateEnd) {
         int userId = AuthUser.get().id();
@@ -73,6 +80,7 @@ public class VoteUserController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation("Create Vote")
     public ResponseEntity<VoteTo> createWithLocation(@Valid @RequestBody VoteTo voteTo) {
         log.info("create {}", voteTo);
         checkNew(voteTo);
@@ -86,6 +94,7 @@ public class VoteUserController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Update Vote")
     public void update(@Valid @RequestBody VoteTo voteTo, @PathVariable int id) {
         log.info("update {} with id={}", voteTo, id);
         assureIdConsistent(voteTo, id);

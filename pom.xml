@@ -55,6 +55,13 @@
             <version>${springdoc.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+
         <!--cache-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

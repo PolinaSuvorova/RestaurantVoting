@@ -23,12 +23,12 @@ import org.springframework.context.annotation.Configuration;
                 version = "1.0",
                 description = """
                         Приложение по курсу TopJava: выпускной проект
-                        <p><b>Тестовые креденшелы:</b><br>
+                        Тестовые креденшелы:<br>
                         - user@yandex.ru / password<br>
                         - admin@gmail.com / admin<br>
                         - guest@gmail.com / guest</p>
                         """,
-                contact = @Contact(name = "Polina Suvorova", email = "polina.tatara@gmail.com")
+                contact = @Contact(url = "https://github.com/PolinaSuvorova" , name = "Polina Suvorova", email = "polina.tatara@gmail.com")
         ),
         security = @SecurityRequirement(name = "basicAuth")
 )
