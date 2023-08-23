@@ -16,7 +16,7 @@ public interface RestaurantRepository extends BaseRepository<Restaurant> {
 
     @Query("SELECT DISTINCT r FROM Restaurant r " +
             "JOIN Dish d on d.restaurant.id = r.id  " +
-            "where d.dateMenu =:dateMenu ")
+            "where r.id =:id and d.dateMenu =:dateMenu ")
     Restaurant get(int id, LocalDate dateMenu);
 
     @Query("SELECT r FROM Restaurant r " +
