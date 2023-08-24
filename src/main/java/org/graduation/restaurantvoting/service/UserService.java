@@ -54,13 +54,6 @@ public class UserService {
         repository.prepareAndSave(user);
     }
 
-    @CacheEvict(cacheNames = "recordsCache", key = "#UserTo.id()")
-    @Transactional
-    public void update(UserTo userTo) {
-        User user = get(userTo.id());
-        repository.prepareAndSave(UsersUtil.updateFromTo(user, userTo));
-    }
-
     @CachePut(cacheNames = "recordsCache", key = "#id")
     @Transactional
     public void enable(int id, boolean enabled) {
