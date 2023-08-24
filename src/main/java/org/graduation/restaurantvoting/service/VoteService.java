@@ -1,6 +1,5 @@
 package org.graduation.restaurantvoting.service;
 
-import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.Vote;
 import org.graduation.restaurantvoting.repository.DishRepository;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;

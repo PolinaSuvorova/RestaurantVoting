@@ -1,7 +1,7 @@
 package org.graduation.restaurantvoting.web.user;
 
 import org.graduation.restaurantvoting.model.User;
-import org.graduation.restaurantvoting.repository.UserRepository;
+import org.graduation.restaurantvoting.service.UserService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
@@ -13,7 +13,7 @@ public abstract class AbstractUserController {
     protected final Logger log = getLogger(getClass());
 
     @Autowired
-    protected UserRepository repository;
+    protected UserService repository;
 
     @Autowired
     private UniqueMailValidator emailValidator;
@@ -25,11 +25,11 @@ public abstract class AbstractUserController {
 
     public User get(int id) {
         log.info("get {}", id);
-        return repository.getExisted(id);
+        return repository.get(id);
     }
 
     public void delete(int id) {
         log.info("delete {}", id);
-        repository.deleteExisted(id);
+        repository.delete(id);
     }
 }
