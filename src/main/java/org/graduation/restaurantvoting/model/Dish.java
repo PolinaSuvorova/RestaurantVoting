@@ -35,7 +35,7 @@ public class Dish extends AbstractNamedEntity {
 
     @Column(name = "price", nullable = false, columnDefinition = "Decimal(6,2)")
     @NotNull
-    Double price;
+    private Double price;
 
     public Dish(Integer id, String name, Double price, LocalDate dateMenu) {
         super(id, name);
