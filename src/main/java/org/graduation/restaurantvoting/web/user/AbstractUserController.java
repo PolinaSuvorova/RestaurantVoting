@@ -13,7 +13,7 @@ public abstract class AbstractUserController {
     protected final Logger log = getLogger(getClass());
 
     @Autowired
-    protected UserService service;
+    protected UserService repository;
 
     @Autowired
     private UniqueMailValidator emailValidator;
@@ -25,11 +25,11 @@ public abstract class AbstractUserController {
 
     public User get(int id) {
         log.info("get {}", id);
-        return service.get(id);
+        return repository.get(id);
     }
 
     public void delete(int id) {
         log.info("delete {}", id);
-        service.delete(id);
+        repository.delete(id);
     }
 }
