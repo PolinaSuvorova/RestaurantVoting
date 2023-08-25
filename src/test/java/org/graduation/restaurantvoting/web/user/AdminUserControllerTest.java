@@ -6,6 +6,7 @@ import org.graduation.restaurantvoting.repository.UserRepository;
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminUserControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    CacheManager cacheManager;
 
     private static final String REST_URL_SLASH = REST_URL + '/';
 

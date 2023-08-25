@@ -5,7 +5,6 @@ import org.graduation.restaurantvoting.repository.UserRepository;
 import org.graduation.restaurantvoting.to.UserTo;
 import org.graduation.restaurantvoting.util.UsersUtil;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -61,7 +60,7 @@ public class UserService {
         repository.prepareAndSave(UsersUtil.updateFromTo(user, userTo));
     }
 
-    @CachePut(cacheNames = "recordsCache", key = "#id")
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void enable(int id, boolean enabled) {
         User user = repository.getExisted(id);
