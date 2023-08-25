@@ -8,10 +8,13 @@ import org.graduation.restaurantvoting.util.UsersUtil;
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.graduation.restaurantvoting.web.UserTestData.*;
 import static org.graduation.restaurantvoting.web.user.ProfileController.REST_URL;
@@ -21,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ProfileControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    CacheManager cacheManager;
 
     @Autowired
     private UserService userService;
@@ -73,7 +79,7 @@ class ProfileControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-
+     User user = userService.get(USER_ID);
         USER_MATCHER.assertMatch(userService.get(USER_ID), UsersUtil.updateFromTo(new User(user), updatedTo));
     }
 

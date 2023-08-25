@@ -3,9 +3,11 @@ package org.graduation.restaurantvoting.web.user;
 import org.graduation.restaurantvoting.model.Role;
 import org.graduation.restaurantvoting.model.User;
 import org.graduation.restaurantvoting.repository.UserRepository;
+import org.graduation.restaurantvoting.util.UsersUtil;
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -41,6 +43,21 @@ class AdminUserControllerTest extends AbstractControllerTest {
                 // https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(admin));
+    }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void getAndCheckCache() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL_SLASH + ADMIN_ID))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(USER_MATCHER.contentJson(admin));
+
+        Cache cache = cacheManager.getCache("users");
+        User userCache = cache.get(ADMIN_ID, User.class);
+        USER_MATCHER.assertMatch(userCache, admin);
+
     }
 
     @Test
@@ -114,6 +131,21 @@ class AdminUserControllerTest extends AbstractControllerTest {
 
         USER_MATCHER.assertMatch(repository.getExisted(USER_ID), getUpdated());
     }
+
+    @Test
+    @WithUserDetails(value = ADMIN_MAIL)
+    void updateAndCheckCache() throws Exception {
+        User updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL_SLASH + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonWithPassword(updated, "newPass")))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+        Cache cache = cacheManager.getCache("users");
+        User userCache = cache.get(USER_ID, User.class);
+        USER_MATCHER.assertMatch(userCache, updated);
+    }
+
 
     @Test
     @WithUserDetails(value = ADMIN_MAIL)

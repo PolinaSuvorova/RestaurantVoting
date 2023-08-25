@@ -42,7 +42,7 @@ public class AdminUserController extends AbstractUserController {
     @ApiOperation("Get all users")
     public List<User> getAll() {
         log.info("getAll");
-        return repository.getAll();
+        return userService.getAll();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +50,7 @@ public class AdminUserController extends AbstractUserController {
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         log.info("create {}", user);
         checkNew(user);
-        User created = repository.create(user);
+        User created = userService.create(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -63,14 +63,14 @@ public class AdminUserController extends AbstractUserController {
     public void update(@Valid @RequestBody User user, @PathVariable int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
-        repository.update(user);
+        userService.update(user);
     }
 
     @GetMapping("/by-email")
     @ApiOperation("Get user by email")
     public User getByEmail(@RequestParam String email) {
         log.info("getByEmail {}", email);
-        return repository.getByEmail(email);
+        return userService.getByEmail(email);
     }
 
     @PatchMapping("/{id}")
@@ -78,6 +78,6 @@ public class AdminUserController extends AbstractUserController {
     @ApiOperation("Set enable/disable for user")
     public void enable(@PathVariable int id, @RequestParam boolean enabled) {
         log.info(enabled ? "enable {}" : "disable {}", id);
-        repository.enable(id, enabled);
+        userService.enable(id, enabled);
     }
 }
