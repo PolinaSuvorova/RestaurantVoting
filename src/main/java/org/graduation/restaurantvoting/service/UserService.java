@@ -5,6 +5,7 @@ import org.graduation.restaurantvoting.repository.UserRepository;
 import org.graduation.restaurantvoting.to.UserTo;
 import org.graduation.restaurantvoting.util.UsersUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -45,6 +46,12 @@ public class UserService {
 
     public User getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
+        User user = repository.getExistedByEmail(email);
+        Cache cache = cacheManager.getCache("users");
+        User userCache = cache.get(user.getId(), User.class);
+        if ( userCache == null ) {
+            cache.put(user.getId(),user);
+        }
         return repository.getExistedByEmail(email);
     }
 
