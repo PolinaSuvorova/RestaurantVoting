@@ -48,11 +48,10 @@ public class UserService {
         Assert.notNull(email, "email must not be null");
         User user = repository.getExistedByEmail(email);
         Cache cache = cacheManager.getCache("users");
-        User userCache = cache.get(user.getId(), User.class);
-        if ( userCache == null ) {
-            cache.put(user.getId(),user);
+        if ( cache != null ){
+            cache.putIfAbsent(user.getId(), user);
         }
-        return repository.getExistedByEmail(email);
+        return user;
     }
 
     public List<User> getAll() {
