@@ -1,6 +1,7 @@
 package org.graduation.restaurantvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -42,13 +43,15 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @ToString.Exclude
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonIdentityReference(alwaysAsId = true)
     private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
+    @JsonIdentityReference(alwaysAsId = true)
     private User user;
 
     public Vote(Integer id, @NotNull LocalDate dateVote, User user, Restaurant restaurant) {

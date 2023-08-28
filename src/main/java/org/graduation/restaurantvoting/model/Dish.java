@@ -1,6 +1,8 @@
 package org.graduation.restaurantvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -26,7 +28,9 @@ public class Dish extends AbstractNamedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RESTAURANT_ID", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonBackReference
+//    @JsonBackReference
+    @JsonProperty("restaurantId")
+    @JsonIdentityReference(alwaysAsId = true)
     private Restaurant restaurant;
 
     @Column(name = "date_menu", nullable = false, columnDefinition = "DATE default CURRENT_DATE", updatable = false)
@@ -49,5 +53,6 @@ public class Dish extends AbstractNamedEntity {
         this.price = price;
         this.restaurant = restaurant;
     }
+
 }
 

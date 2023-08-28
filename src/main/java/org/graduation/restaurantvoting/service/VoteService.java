@@ -11,6 +11,7 @@ import org.graduation.restaurantvoting.util.DateTimeUtil;
 import org.graduation.restaurantvoting.util.validation.ValidationUtil;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
@@ -35,14 +36,17 @@ public class VoteService {
     }
 
     public Vote get(int id, int userId) {
-        return checkNotFoundWithId(repository.getWithUser(id, userId), id);
+        Vote vote = repository.getExisted(id);
+        Assert.isTrue(vote.getUser().getId().equals(userId), "Only owner can change vote");
+        return vote;
     }
 
+    @Transactional
     public void delete(int id, int userId) {
         Vote vote = get(id, userId);
         ValidationUtil.checkDate(vote.getDateVote());
         ValidationUtil.checkTime(LocalTime.now(ClockHolder.getClock()));
-        repository.delete(id);
+        repository.deleteExisted(id);
     }
 
 
@@ -54,6 +58,7 @@ public class VoteService {
         return repository.getAll(userId);
     }
 
+    @Transactional
     public void update(VoteTo voteTo, int userId) {
         Assert.notNull(voteTo, "vote must not be null");
         Assert.isTrue(voteTo.getUserId().equals(userId), "Only owner can change vote");
@@ -65,6 +70,7 @@ public class VoteService {
         checkNotFoundWithId(repository.save(vote), voteTo.id());
     }
 
+    @Transactional
     public Vote create(VoteTo voteTo, int userId) {
         Assert.notNull(voteTo, "meal must not be null");
         Integer restaurantId = voteTo.getRestaurantId();

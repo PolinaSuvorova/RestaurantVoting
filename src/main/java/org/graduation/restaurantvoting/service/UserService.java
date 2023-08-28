@@ -4,6 +4,8 @@ import org.graduation.restaurantvoting.model.User;
 import org.graduation.restaurantvoting.repository.UserRepository;
 import org.graduation.restaurantvoting.to.UserTo;
 import org.graduation.restaurantvoting.util.UsersUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,10 +18,14 @@ import java.util.List;
 
 @Service
 public class UserService {
+
+    private final CacheManager cacheManager;
+
     private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, CacheManager cacheManager) {
         this.repository = repository;
+        this.cacheManager = cacheManager;
     }
 
     public User create(User user) {
@@ -27,12 +33,12 @@ public class UserService {
         return repository.prepareAndSave(user);
     }
 
-    @CacheEvict(cacheNames =  "users", key="#id")
+    @CacheEvict(cacheNames = "users", key = "#id")
     public void delete(int id) {
         repository.deleteExisted(id);
     }
 
-    @Cacheable(cacheNames =  "users", key="#id")
+    @Cacheable(cacheNames = "users", key = "#id")
     public User get(int id) {
         return repository.getExisted(id);
     }
@@ -46,20 +52,20 @@ public class UserService {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }
 
-    @CachePut(cacheNames = "users", key="#user.id")
+    @CachePut(cacheNames = "users", key = "#user.id")
     public User update(User user) {
         Assert.notNull(user, "user must not be null");
-       return repository.prepareAndSave(user);
+        return repository.prepareAndSave(user);
     }
 
-    @CachePut(value = "users", key="#userTo.id")
+    @CachePut(value = "users", key = "#userTo.id")
     @Transactional
     public User update(UserTo userTo) {
         User user = get(userTo.id());
-       return repository.prepareAndSave(UsersUtil.updateFromTo(user, userTo));
+        return repository.prepareAndSave(UsersUtil.updateFromTo(user, userTo));
     }
 
-    @CachePut(value = "users", key="#id")
+    @CachePut(value = "users", key = "#id")
     @Transactional
     public User enable(int id, boolean enabled) {
         User user = repository.getExisted(id);

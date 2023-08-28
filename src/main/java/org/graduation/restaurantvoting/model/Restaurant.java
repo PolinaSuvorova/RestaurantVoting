@@ -1,5 +1,6 @@
 package org.graduation.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -18,6 +19,7 @@ import java.util.List;
         , uniqueConstraints = {@UniqueConstraint(columnNames = {"name"}, name = "restaurans_unique_name_idx")}
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIdentityReference(alwaysAsId = true)
 public class Restaurant extends AbstractNamedEntity {
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("dateMenu desc")
@@ -38,4 +40,5 @@ public class Restaurant extends AbstractNamedEntity {
     public Restaurant(Restaurant r) {
         this(r.id, r.name, r.dishes);
     }
+
 }

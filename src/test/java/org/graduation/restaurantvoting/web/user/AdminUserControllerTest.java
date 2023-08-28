@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AdminUserControllerTest extends AbstractControllerTest {
 
     @Autowired
-    CacheManager cacheManager;
+    private CacheManager cacheManager;
 
     private static final String REST_URL_SLASH = REST_URL + '/';
 
