@@ -1,11 +1,11 @@
-package org.graduation.restaurantvoting.web.dish;
+package org.graduation.restaurantvoting.web.menu;
 
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.graduation.restaurantvoting.web.DishTestData.*;
+import static org.graduation.restaurantvoting.web.MenuTestData.*;
 import static org.graduation.restaurantvoting.web.RestaurantTestData.RESTAURANT1_ID;
 import static org.graduation.restaurantvoting.web.RestaurantTestData.RESTAURANT3_ID;
 import static org.graduation.restaurantvoting.web.TestUtil.userHttpBasic;
@@ -14,8 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class DishControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = DishController.REST_URL + '/';
+class MenuControllerTest extends AbstractControllerTest {
+    private static final String REST_URL = MenuController.REST_URL + '/';
 
     @Test
     void get() throws Exception {
@@ -24,7 +24,7 @@ class DishControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(dish1));
+                .andExpect(MENU_ITEM_MATCHER.contentJson(MENU_ITEM_1));
     }
 
     @Test
@@ -42,6 +42,6 @@ class DishControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(dishesNowRest1));
+                .andExpect(MENU_ITEM_MATCHER.contentJson(MENU_ITEMS_NOW_REST_1));
     }
 }

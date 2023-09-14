@@ -1,16 +1,14 @@
 package org.graduation.restaurantvoting.web.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.graduation.restaurantvoting.model.User;
 import org.graduation.restaurantvoting.service.UserService;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
+@Slf4j
 public abstract class AbstractUserController {
-    protected final Logger log = getLogger(getClass());
 
     @Autowired
     protected UserService userService;

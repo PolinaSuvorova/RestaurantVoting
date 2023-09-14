@@ -1,5 +1,6 @@
 package org.graduation.restaurantvoting.web;
 
+import jakarta.persistence.EntityManager;
 import org.graduation.restaurantvoting.util.ClockHolder;
 import org.graduation.restaurantvoting.util.validation.ValidationUtil;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,6 +34,9 @@ public abstract class AbstractControllerTest {
             0, 0);
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    protected EntityManager entityManager;
 
     @BeforeAll
     static void setUpClock() {

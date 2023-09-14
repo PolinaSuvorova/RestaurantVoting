@@ -1,7 +1,7 @@
 DELETE FROM user_role;
 DELETE FROM vote;
 DELETE FROM users;
-DELETE FROM dish;
+DELETE FROM menu_item;
 DELETE FROM RESTAURANT;
 
 INSERT INTO USERS (name, email, password)
@@ -19,12 +19,12 @@ VALUES ('Restaurant1'),
        ('Restaurant2'),
        ('Restaurant3');
 
-INSERT INTO DISH (name,PRICE,RESTAURANT_ID)
-VALUES ('Dish1.1',600.00,1),
-       ('Dish1.2',200.00,1),
-       ('Dish2.1',400.00,2);
+INSERT INTO MENU_ITEM (name,PRICE,RESTAURANT_ID)
+VALUES ('Dish1.1',600,1),
+       ('Dish1.2',200,1),
+       ('Dish2.1',400,2);
 
-INSERT INTO DISH (name,PRICE,RESTAURANT_ID,DATE_MENU)
+INSERT INTO MENU_ITEM (name,PRICE,RESTAURANT_ID,DATE_MENU)
 VALUES ('Dish1.1',600.00,1,'2023-08-08');
 
 INSERT INTO VOTE (USER_ID,RESTAURANT_ID)

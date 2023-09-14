@@ -1,16 +1,15 @@
-package org.graduation.restaurantvoting.web.dish;
+package org.graduation.restaurantvoting.web.menu;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.graduation.restaurantvoting.error.NotFoundException;
-import org.graduation.restaurantvoting.model.Dish;
-import org.graduation.restaurantvoting.repository.DishRepository;
+import org.graduation.restaurantvoting.model.MenuItem;
+import org.graduation.restaurantvoting.repository.MenuItemRepository;
 import org.graduation.restaurantvoting.repository.RestaurantRepository;
 import org.graduation.restaurantvoting.util.DateTimeUtil;
 import org.graduation.restaurantvoting.util.validation.ValidationUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,24 +25,23 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = AdminDishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminMenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Api("Api for admin by managed menu for day")
-public class AdminDishController {
+@Slf4j
+public class AdminMenuController {
 
     public static final String REST_URL = "/api/admin/restaurants";
 
-    protected final Logger log = LoggerFactory.getLogger(getClass());
-
     @Autowired
-    private DishValidator dishValidator;
+    private MenuValidator menuValidator;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(dishValidator);
+        binder.addValidators(menuValidator);
     }
 
     @Autowired
-    private DishRepository repository;
+    private MenuItemRepository repository;
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -58,49 +56,51 @@ public class AdminDishController {
 
     @GetMapping("/{restaurantId}/dishes/{id}")
     @ApiOperation("Get dish by restaurant id and dish id")
-    public Dish get(@PathVariable int restaurantId, @PathVariable int id) {
-        log.info("get Dish {} ", id);
-        Optional<Dish> dish = Optional.ofNullable(repository.get(id, restaurantId));
-        return dish.orElseThrow(() -> new NotFoundException("Dish with id=" + id + " not found"));
+    public MenuItem get(@PathVariable int restaurantId, @PathVariable int id) {
+        log.info("get MenuItem {} ", id);
+        Optional<MenuItem> dish = Optional.ofNullable(repository.get(id, restaurantId));
+        return dish.orElseThrow(() -> new NotFoundException("MenuItem with id=" + id + " not found"));
     }
 
     @GetMapping("/{restaurantId}/dishes")
     @ApiOperation("Get all dishes for restaurant")
-    public List<Dish> getAll(@PathVariable int restaurantId) {
+    public List<MenuItem> getAll(@PathVariable int restaurantId) {
         log.info("get all");
         return repository.getAllByRestId(restaurantId);
     }
 
     @GetMapping("/{restaurantId}/dishes/filter")
     @ApiOperation("Get all dishes for restaurant with filter by date")
-    public List<Dish> getBetween(
+    public List<MenuItem> getBetween(
             @PathVariable int restaurantId,
             @RequestParam @Nullable LocalDate startDate,
             @RequestParam @Nullable LocalDate endDate) {
         log.info("filter dishes");
         return repository.getBetween(restaurantId,
-                DateTimeUtil.atStartOfDayOrMin(startDate),
-                DateTimeUtil.atStartOfDayOrMax(endDate));
+                DateTimeUtil.setLocDateOrMin(startDate),
+                DateTimeUtil.setLocDateOrMax(endDate));
     }
 
     @PutMapping(value = "/{restaurantId}/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation("Update dish for restaurant if dish create in current date")
-    public void update(@Valid @RequestBody Dish dish, @PathVariable int restaurantId, @PathVariable int id) {
-        log.info("update dish {} with id={}", dish, id);
-        ValidationUtil.assureIdConsistent(dish, id);
-        ValidationUtil.assureIdConsistent(repository.getWithRestaurant(id, restaurantId).getRestaurant(), restaurantId);
-        save(dish);
+    @ApiOperation("Update menuItem for restaurant if menuItem create in current date")
+    public void update(@Valid @RequestBody MenuItem menuItem, @PathVariable int restaurantId, @PathVariable int id) {
+        log.info("update menuItem {} with id={}", menuItem, id);
+        ValidationUtil.assureIdConsistent(menuItem, id);
+        if (repository.get(id, restaurantId) == null) {
+            ValidationUtil.checkNotFoundWithId(null, id);
+        }
+        save(menuItem);
     }
 
     @PostMapping(value = "/{restaurantId}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation("Create dish for restaurant")
-    public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
-        log.info("create dish {} ", dish);
-        ValidationUtil.checkNew(dish);
-        dish.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
-        ValidationUtil.assureIdConsistent(dish.getRestaurant(), restaurantId);
-        Dish created = save(dish);
+    @ApiOperation("Create menuItem for restaurant")
+    public ResponseEntity<MenuItem> createWithLocation(@Valid @RequestBody MenuItem menuItem, @PathVariable int restaurantId) {
+        log.info("create menuItem {} ", menuItem);
+        ValidationUtil.checkNew(menuItem);
+        menuItem.setRestaurant(restaurantRepository.getReferenceById(restaurantId));
+        ValidationUtil.assureIdConsistent(menuItem.getRestaurant(), restaurantId);
+        MenuItem created = save(menuItem);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -108,8 +108,8 @@ public class AdminDishController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-    private Dish save(Dish dish) {
-        return repository.save(dish);
+    private MenuItem save(MenuItem menuItem) {
+        return repository.save(menuItem);
     }
 
 }

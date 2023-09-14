@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Value;
 
 import java.beans.ConstructorProperties;
-import java.time.LocalDate;
 
 @Getter
 @Value
@@ -16,20 +15,12 @@ import java.time.LocalDate;
 public class VoteTo extends BaseTo {
 
     @NotNull
-    Integer userId;
-
-    @NotNull
     Integer restaurantId;
 
-    @NotNull
-    LocalDate voteDate;
-
-    @ConstructorProperties({"id", "userId", "restaurantId", "voteDate"})
-    public VoteTo(Integer id, Integer userId, Integer restaurantId, LocalDate voteDate) {
+    @ConstructorProperties({"id", "restaurantId"})
+    public VoteTo(Integer id, Integer restaurantId) {
         super(id);
-        this.userId = userId;
         this.restaurantId = restaurantId;
-        this.voteDate = voteDate;
     }
 
     public boolean isNew() {
@@ -38,6 +29,6 @@ public class VoteTo extends BaseTo {
 
     @Override
     public String toString() {
-        return "VoteTo:" + id + '[' + restaurantId + ']' + voteDate;
+        return "VoteTo:" + id + '[' + restaurantId + ']';
     }
 }

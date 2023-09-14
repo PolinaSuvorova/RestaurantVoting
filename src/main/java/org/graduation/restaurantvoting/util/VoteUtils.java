@@ -14,9 +14,7 @@ public class VoteUtils {
     public static VoteTo convertTo(Vote vote) {
         return new VoteTo(
                 vote.getId(),
-                vote.getUser().getId(),
-                vote.getRestaurant().getId(),
-                vote.getDateVote());
+                vote.getRestaurant().getId());
     }
 
     public static List<VoteTo> getTos(Collection<Vote> votes) {

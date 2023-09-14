@@ -13,6 +13,8 @@ public class RestaurantTestData {
     public static final int RESTAURANT1_ID = START_SEQ;
     public static final int RESTAURANT2_ID = START_SEQ + 1;
     public static final int RESTAURANT3_ID = START_SEQ + 2;
+
+    public static final int RESTAURANT_ERROR_ID = START_SEQ + 11;
     public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Restaurant1");
     public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Restaurant2");
     public static final Restaurant restaurant3 = new Restaurant(RESTAURANT3_ID, "Restaurant3");

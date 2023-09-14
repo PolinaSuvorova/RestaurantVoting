@@ -3,14 +3,12 @@ package org.graduation.restaurantvoting.web.vote;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.graduation.restaurantvoting.model.Vote;
-import org.graduation.restaurantvoting.repository.RestaurantRepository;
-import org.graduation.restaurantvoting.repository.UserRepository;
 import org.graduation.restaurantvoting.service.VoteService;
 import org.graduation.restaurantvoting.to.VoteTo;
 import org.graduation.restaurantvoting.util.VoteUtils;
 import org.graduation.restaurantvoting.web.AuthUser;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,24 +23,16 @@ import java.util.List;
 
 import static org.graduation.restaurantvoting.util.validation.ValidationUtil.assureIdConsistent;
 import static org.graduation.restaurantvoting.util.validation.ValidationUtil.checkNew;
-import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
 @RequestMapping(value = VoteUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Api("Api for restaurant voting ")
+@Slf4j
 public class VoteUserController {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RestaurantRepository restaurantRepository;
+    public static final String REST_URL = "/api/votes";
 
     @Autowired
     private VoteService voteService;
-
-    private final Logger log = getLogger(getClass());
-    public static final String REST_URL = "/api/votes";
 
     @GetMapping("/{id}")
     @ApiOperation("Get vote by id for user")
@@ -59,16 +49,6 @@ public class VoteUserController {
         log.info("getall {} for user", userId);
         return VoteUtils.getTos(voteService.getAll(userId));
     }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation("Delete vote")
-    public void delete(@PathVariable int id) {
-        int userId = AuthUser.get().id();
-        log.info("delete vote {} for user {}", id, userId);
-        voteService.delete(id, userId);
-    }
-
 
     @GetMapping("/filter")
     @ApiOperation("Get Votes by filter")
@@ -99,7 +79,6 @@ public class VoteUserController {
         log.info("update {} with id={}", voteTo, id);
         assureIdConsistent(voteTo, id);
         int userId = AuthUser.get().id();
-
         voteService.update(voteTo, userId);
     }
 }

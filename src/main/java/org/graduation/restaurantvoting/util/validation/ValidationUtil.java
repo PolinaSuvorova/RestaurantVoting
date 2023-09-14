@@ -5,6 +5,7 @@ import org.graduation.restaurantvoting.HasId;
 import org.graduation.restaurantvoting.error.IllegalRequestDataException;
 import org.graduation.restaurantvoting.error.NotFoundException;
 import org.graduation.restaurantvoting.model.Restaurant;
+import org.graduation.restaurantvoting.util.ClockHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
@@ -50,7 +51,7 @@ public class ValidationUtil {
     public static void checkDate(LocalDate localDate) {
         if (localDate == null) {
             throw new IllegalRequestDataException("Date must not be null");
-        } else if (localDate.isBefore(LocalDate.now())) {
+        } else if (localDate.isBefore(LocalDate.now(ClockHolder.getClock()))) {
             throw new IllegalRequestDataException("Changes permitted only for current Date");
         }
     }

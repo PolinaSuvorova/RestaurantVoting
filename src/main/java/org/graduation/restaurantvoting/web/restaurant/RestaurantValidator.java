@@ -43,12 +43,7 @@ public class RestaurantValidator implements org.springframework.validation.Valid
             return;
         }
 
-        if (repository.getAllByName(name)
-                .stream()
-                .anyMatch(d -> {
-                    assert d.getId() != null;
-                    return !(d.getId().equals(idParam));
-                })) {
+        if (repository.getAllByName(name) != null) {
             errors.rejectValue("name", EXCEPTION_DUPLICATE_RESTAURANT);
         }
     }

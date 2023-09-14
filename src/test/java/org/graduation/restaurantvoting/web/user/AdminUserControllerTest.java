@@ -3,7 +3,6 @@ package org.graduation.restaurantvoting.web.user;
 import org.graduation.restaurantvoting.model.Role;
 import org.graduation.restaurantvoting.model.User;
 import org.graduation.restaurantvoting.repository.UserRepository;
-import org.graduation.restaurantvoting.util.UsersUtil;
 import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

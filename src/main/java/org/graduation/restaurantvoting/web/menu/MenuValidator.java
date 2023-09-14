@@ -1,9 +1,9 @@
-package org.graduation.restaurantvoting.web.dish;
+package org.graduation.restaurantvoting.web.menu;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.graduation.restaurantvoting.model.Dish;
-import org.graduation.restaurantvoting.repository.DishRepository;
+import org.graduation.restaurantvoting.model.MenuItem;
+import org.graduation.restaurantvoting.repository.MenuItemRepository;
 import org.graduation.restaurantvoting.util.ClockHolder;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -16,25 +16,25 @@ import java.util.Map;
 
 @Component
 @AllArgsConstructor
-public class DishValidator implements org.springframework.validation.Validator {
-    public static final String EXCEPTION_DUPLICATE_DISH = "Dish by date with this name already exists";
+public class MenuValidator implements org.springframework.validation.Validator {
+    public static final String EXCEPTION_DUPLICATE_DISH = "MenuItem by date with this name already exists";
     public static final String EXCEPTION_DATE_DISH = "Update/create  by this date is not permitted";
     public static final String EXCEPTION_DATE_UPDATE = "Update date is not permitted";
 
-    private final DishRepository repository;
+    private final MenuItemRepository repository;
     private final HttpServletRequest request;
 
     @Override
     public boolean supports(@NonNull Class<?> clazz) {
-        return Dish.class.isAssignableFrom(clazz);
+        return MenuItem.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(@NonNull Object target, @NonNull Errors errors) {
         String methodCall = request.getMethod();
-        Dish dish = (Dish) target;
+        MenuItem menuItem = (MenuItem) target;
 
-        LocalDate dateMenu = dish.getDateMenu();
+        LocalDate dateMenu = menuItem.getDateMenu();
         if (dateMenu == null && methodCall.equals("POST")) {
             dateMenu = LocalDate.now(ClockHolder.getClock());
         }
@@ -54,8 +54,8 @@ public class DishValidator implements org.springframework.validation.Validator {
         String idParamString = (String) pathVariables.get("id");
         if (StringUtils.hasText(idParamString)) {
             idParam = Integer.parseInt(idParamString);
-            Dish dishDb = repository.get(idParam, restaurantId);
-            if (!dishDb.getDateMenu().equals(dateMenu)) {
+            MenuItem menuItemDb = repository.get(idParam, restaurantId);
+            if (!menuItemDb.getDateMenu().equals(dateMenu)) {
                 errors.rejectValue("dateMenu", "", EXCEPTION_DATE_UPDATE);
             }
         } else {
@@ -65,7 +65,7 @@ public class DishValidator implements org.springframework.validation.Validator {
                 .stream()
                 .anyMatch(d -> {
                     assert d.getId() != null;
-                    return !(d.getId().equals(idParam)) && d.getName().equals(dish.getName());
+                    return !(d.getId().equals(idParam)) && d.getName().equals(menuItem.getName());
                 })) {
             errors.rejectValue("name", EXCEPTION_DUPLICATE_DISH);
         }

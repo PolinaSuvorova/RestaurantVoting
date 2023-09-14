@@ -3,6 +3,7 @@ package org.graduation.restaurantvoting.web.user;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.graduation.restaurantvoting.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,8 +20,8 @@ import static org.graduation.restaurantvoting.util.validation.ValidationUtil.che
 @RestController
 @RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Api("Api for admin for manage user")
+@Slf4j
 public class AdminUserController extends AbstractUserController {
-
     static final String REST_URL = "/api/admin/users";
 
     @Override
@@ -51,9 +52,7 @@ public class AdminUserController extends AbstractUserController {
         log.info("create {}", user);
         checkNew(user);
         User created = userService.create(user);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL + "/{id}")
-                .buildAndExpand(created.getId()).toUri();
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath().path(REST_URL + "/{id}").buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

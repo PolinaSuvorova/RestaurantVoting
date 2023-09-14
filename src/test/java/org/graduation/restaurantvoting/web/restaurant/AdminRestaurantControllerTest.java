@@ -8,6 +8,7 @@ import org.graduation.restaurantvoting.web.AbstractControllerTest;
 import org.graduation.restaurantvoting.web.RestaurantTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -28,6 +29,9 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @Test
     void get() throws Exception {
@@ -102,6 +106,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(RESTAURANT1_ID), updated);
+        evictAllCaches();
     }
 
     @Test
@@ -136,5 +141,11 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(TO_MATCHER.contentJson(List.of(restaurant1)));
+    }
+
+    private void evictAllCaches() {
+        for (String name : cacheManager.getCacheNames()) {
+            cacheManager.getCache(name).clear();
+        }
     }
 }

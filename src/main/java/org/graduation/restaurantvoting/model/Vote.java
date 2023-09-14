@@ -2,7 +2,6 @@ package org.graduation.restaurantvoting.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -17,11 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "vote", uniqueConstraints =
-        {
-                @UniqueConstraint(columnNames = {"user_id", "date_vote"}, name = "vote_unique_user_date_idx"),
-                @UniqueConstraint(columnNames = {"restaurant_id", "date_vote", "user_id"}, name = "vote_unique_restaurant_date_idx")
-        })
+@Table(name = "vote", uniqueConstraints = @UniqueConstraint(columnNames =
+        {"user_id", "date_vote"}, name = "vote_unique_user_date_idx"))
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

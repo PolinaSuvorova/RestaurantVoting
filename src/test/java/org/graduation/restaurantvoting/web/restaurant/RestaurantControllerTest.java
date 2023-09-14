@@ -50,7 +50,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getWithError() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/" + RESTAURANT3_ID)
+        perform(MockMvcRequestBuilders.get(REST_URL + "/" + RESTAURANT_ERROR_ID)
                 .with(userHttpBasic(user)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
